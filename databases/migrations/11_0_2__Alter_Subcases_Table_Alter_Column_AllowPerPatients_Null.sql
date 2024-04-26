@@ -1,0 +1,1 @@
+ALTER TABLE "Subcases" ALTER COLUMN "AllowPerPatients" DROP NOT NULL;
