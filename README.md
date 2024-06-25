@@ -10,7 +10,9 @@ Studget dient der Vollkostenberechnung von Studien im Rahmen der EU-Richtlinie f
 - [Erste Schritte](#Erste-Schritte)
 - [Umgebungsvariablen](#Umgebungsvariablen)
 - [Docker Secrets](#Docker-Secrets)
-- [Datenbank Konfiguration](#Initiale-Datenbank-konfiguration)
+- [Flyway](#Flyway)
+    * [Flyway Konfiguration](#Flyway-Konfiguration)
+    * [Platzhalter](#Platzhalter)
 - [SSL Proxy Server](#ssl-proxy-server)
 - [Login](#Standart-Login)
 - [Container Shell](#Zugriff-auf-die-Container-Shell)
@@ -30,7 +32,7 @@ Installieren Sie hierfür die Docker Engine: https://docs.docker.com/get-docker/
 
 ## Lizensierung und Download des Docker Images
 
-Es wird ein Zugang zum privaten Docker Healex Repository benötigt.  
+Es wird ein Zugang zum privaten Healex Docker Repository benötigt.  
 Wenden Sie sich hierfür an <support@healex.systems> um die Lizenzbedingungen zu besprechen. Sobald die Lizenz eingerichtet ist, erhalten Sie ihren Kontonamen, mit welchem der Zugriff zum Docker Repository ermöglicht wird. 
 
 ## Hardware-Anforderungen
@@ -51,6 +53,7 @@ Die Hardwareanforderungen sollten vom hauseigenen Betrieb überwacht und angepas
       * Google Chrome
       * Mozilla Firefox
       * Microsoft Edge
+      * Safari
 
 # Erste Schritte 
 
@@ -71,7 +74,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:9.0.2
+    image: healexsystems/studget:10.1.0
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -101,6 +104,33 @@ services:
       POSTGRES_USER: studget
       POSTGRES_PASSWORD: password
       POSTGRES_DB: studget
+
+  flyway:
+    image: flyway/flyway:10-alpine
+    container_name: flyway
+    environment:
+      FLYWAY_USER: studget
+      FLYWAY_PASSWORD: password
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/studget
+      FLYWAY_SCHEMAS: public
+    command: [
+      "-locations=filesystem:/flyway/sql",
+      "-connectRetries=60",
+      "-placeholders.studgetAdminUserName=admin",
+      "-placeholders.studgetAdminName=admin",
+      "-placeholders.studgetAdminMail=studget@my-domain.com",
+      "-placeholders.studgetAdminPassword=Studget2024#",
+      "-placeholders.dataBaseUser=studget",
+      "-placeholders.dataBasePassword=password",
+      "-placeholders.aesInitialVector=16-character-string",
+      "-placeholders.aesPassword=32-character-string",
+      "info",
+      "migrate",
+      "info"
+    ]
+    volumes:
+      - ./flyway/sql-v15:/flyway/sql
+
 ```
 
 # Umgebungsvariablen
@@ -171,14 +201,71 @@ services:
         target: JWT_KEY
 ```
 
-# Initiale Datenbank konfiguration
+# Flyway
 
-Starte den Datenbank Container und führe das Datenbank Skript aus:
+Der Zweck des Flyway Containers liegt daran, die initiale Datenbank aufzusetzen sowie Datenbankmigration bei Versions Upgrades durchzufügen.
 
-```shell
-chmod +x db_setup.sh
-./db_setup.sh
+## Flyway Konfiguration
+
+```yaml
+flyway:
+    container_name: flyway
+    image: flyway/flyway:10-alpine
+    environment:
+      FLYWAY_USER: <POSTGRES_USER>
+      FLYWAY_PASSWORD: <POSTGRES_PASSWORD>
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/<POSTGRES_DB>
+      FLYWAY_SCHEMAS: public
+    command: [
+      "-locations=filesystem:/flyway/sql",
+      "-connectRetries=60",
+      "-placeholders.studgetAdminUserName=<studgetAdminUserName>",
+      "-placeholders.studgetAdminName=<studgetAdminName>",
+      "-placeholders.studgetAdminMail=<studgetAdminMail>",
+      "-placeholders.studgetAdminPassword=<studgetAdminPassword>",
+      "-placeholders.dataBaseUser=<dataBaseUser>",
+      "-placeholders.dataBasePassword=<dataBasePassword>",
+      "-placeholders.aesInitialVector=<aesInitialVector>",
+      "-placeholders.aesPassword=<aesPassword>",
+      "info",
+      "migrate",
+      "info"
+    ]
+    volumes:
+      - ./flyway/sql-v15:/flyway/sql
 ```
+  
+## Platzhalter
+
+Platzhalter in Flyway werden dazu verwendet, um Werte in den SQL-Migrationsskripten dynamisch zu ersetzen.
+
+Die folgenden Platzhalter werden zum Einrichten des ersten Studget-Administratorbenutzers verwendet:
+
+- `studgetAdminUserName`: Benutzername für den Studget-Administratorbenutzer.
+- `studgetAdminName`: Name des Studget-Administratorbenutzers.
+- `studgetAdminMail`: E-Mail-Adresse des Studget-Administratorbenutzers.
+- `studgetAdminPassword`: Passwort für den Studget-Administratorbenutzer.
+
+Die folgenden Platzhalter werden verwendet, um das verschlüsselte Passwort mithilfe von AES-Werten einzurichten.
+
+- `aesInitialVector`: AES-Anfangsvektor für die Verschlüsselung.
+- `aesPassword`: AES-Schlüssel zur Verschlüsselung.
+
+Für die Datenbank Anmeldung werden folgende Platzhalter verwendet:
+
+- `dataBaseUser`: Datenbank Benutzer.
+- `dataBasePassword`: Passwort des Datenbank Benutzers.
+
+## Flyway Befehle
+
+Flyway unterstützt eine Vielzahl von Befehlen zum Verwalten von Datenbankmigrationen. Im Studget Kontext werden die folgenden Befehle verwendet:
+
+- `info`: Zeigt den aktuellen Status von allen Migrationen an.
+- `migrate`: Alle ausstehenden Migrationen werden angewendet.
+
+Weitere Informationen zu Flyway können [hier](https://github.com/flyway/flyway-docker) entnommen werden.
+
+
 # SSL Proxy-Server
 Eine SSL-Verschlüsselung mittels eines Proxy Servers ist empfohlen und im produktiven Betrieb zwingend.
 
