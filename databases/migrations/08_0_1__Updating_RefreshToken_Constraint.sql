@@ -1,7 +1,0 @@
-ALTER TABLE "RefreshToken" DROP CONSTRAINT "FK_JwtId";
-
-ALTER TABLE "RefreshToken" 
-ADD CONSTRAINT "FK_JwtId" FOREIGN KEY ("JwtId", "UserId")
-    REFERENCES public."LogIns" ("JwtId", "UserId") MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;

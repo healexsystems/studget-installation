@@ -14,7 +14,6 @@ Studget dient der Vollkostenberechnung von Studien im Rahmen der EU-Richtlinie f
     * [Flyway Konfiguration](#Flyway-Konfiguration)
     * [Platzhalter](#Platzhalter)
 - [SSL Proxy Server](#ssl-proxy-server)
-- [Login](#Standart-Login)
 - [Container Shell](#Zugriff-auf-die-Container-Shell)
 - [Logs](#anzeige-von-container-logs)
 
@@ -268,12 +267,6 @@ Weitere Informationen zu Flyway können [hier](https://github.com/flyway/flyway-
 
 # SSL Proxy-Server
 Eine SSL-Verschlüsselung mittels eines Proxy Servers ist empfohlen und im produktiven Betrieb zwingend.
-
-# Standart Login
-
-Benutzer: Admin <br>
-Passwort: 1Admin_User
-
 
 # Zugriff auf die Container-Shell
 

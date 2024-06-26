@@ -1,1 +1,0 @@
-DELETE FROM "Users_Organizational_Units" WHERE "IdOrganizationalunit" IN (SELECT "IdOrganizationalunit" FROM "Organizational_Units" WHERE "Enabled" = false);

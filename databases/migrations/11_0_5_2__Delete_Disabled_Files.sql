@@ -1,1 +1,0 @@
-DELETE FROM "Files" where "Enabled" = false;

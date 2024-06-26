@@ -1,1 +1,0 @@
-ALTER TABLE "Status" ADD COLUMN "Sequence" int2 DEFAULT 1 NOT NULL;

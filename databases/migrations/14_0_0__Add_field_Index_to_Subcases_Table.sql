@@ -1,1 +1,0 @@
-ALTER TABLE "Subcases" ADD COLUMN "Index" int4 DEFAULT 0;
