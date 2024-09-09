@@ -25,6 +25,7 @@ Studget dient der Vollkostenberechnung von Studien im Rahmen der EU-Richtlinie f
 - [SSL Proxy-Server](#ssl-proxy-server)
 - [Zugriff auf die Container-Shell](#zugriff-auf-die-container-shell)
 - [Anzeige von Container Logs](#anzeige-von-container-logs)
+- [Studget Upgrade](#studget-upgrade)
 
 # Systemanforderungen
 ## Umgebungseinrichtung
@@ -399,3 +400,37 @@ docker exec -it docker some-studget /bin/sh
 ```shell
 docker logs Container-ID
 ```
+
+# Studget Upgrade
+
+1. Laden Sie das Image herunter, auf welches geupgraded werden soll, beispielsweise für die Version `10.2.0`: <br> 
+```shell
+docker pull healexsystems/studget:10.2.0
+```
+2. Aktualisierung der Datenbank Migrationen: Im Flyway-Ordner müssen die für die jeweilige Version benötigten Migrationen enthalten sein. Wird beispielsweise von Version `10.1.0` auf die Version `10.2.0` geupgraded (die Version `10.1.1` wird übersprungen), beinhaltet der Migrationsname der letzten auszuführenden Migration: `Changelog_10.2.0`. Befinden sich Migrationen bereits im Flyway-Ordner, bleiben diese bestehen und sollten nicht gelöscht werden.
+
+In dem genannten Beispiel beinhaltet der Flyway-Ordner von Version `10.1.0` folgende Dateien:
+```shell
+V1_0_0__Initial_database.sql
+V15_0_3__Create_example_colum.sql
+V15_0_4__Changelog_10.1.0.sql
+```
+----
+Für das Upgrade auf die Version `10.2.0` werden folgende Migrations-Dateien hinzugefügt:
+```shell
+V15_0_5___Add_some_features.sql
+V15_0_6__Changelog_10.1.1.sql
+V15_0_7__Changelog_10.2.0.sql
+```
+----
+Dementsprechend beinhalt der Flyway-Ordner der Version `10.2.0` folgende Dateien:
+```shell
+V1_0_0__Initial_database.sql
+V15_0_3__Create_example_colum.sql
+V15_0_4__Changelog_10.1.0.sql
+V15_0_5___Add_some_features.sql
+V15_0_6__Changelog_10.1.1.sql
+V15_0_7__Changelog_10.2.0.sql
+```
+3. Neustart des Docker Stacks.
+
