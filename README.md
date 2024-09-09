@@ -81,7 +81,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:10.1.0
+    image: healexsystems/studget:11.0.0
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -129,6 +129,8 @@ services:
       "-placeholders.studgetAdminPassword=Studget2024#",
       "-placeholders.dataBaseUser=studget",
       "-placeholders.dataBasePassword=password",
+      "-placeholders.postgresDataBaseUser=studget",
+      "-placeholders.postgresDataBasePassword=password",
       "-placeholders.aesInitialVector=16-character-string",
       "-placeholders.aesPassword=32-character-string",
       "info",
@@ -136,7 +138,7 @@ services:
       "info"
     ]
     volumes:
-      - ./flyway/sql-v15:/flyway/sql
+      - ./flyway/:/flyway/sql
 
 ```
 
@@ -219,27 +221,28 @@ flyway:
     container_name: flyway
     image: flyway/flyway:10-alpine
     environment:
-      FLYWAY_USER: <POSTGRES_USER>
-      FLYWAY_PASSWORD: <POSTGRES_PASSWORD>
-      FLYWAY_URL: jdbc:postgresql://postgres:5432/<POSTGRES_DB>
+      FLYWAY_USER: ${pg_db_user}
+      FLYWAY_PASSWORD: ${pg_db_password}
+      FLYWAY_URL: jdbc:postgresql://${pg_db_host}:5432/${pg_db_user}
       FLYWAY_SCHEMAS: public
-    command: [
-      "-locations=filesystem:/flyway/sql",
-      "-connectRetries=60",
-      "-placeholders.studgetAdminUserName=<studgetAdminUserName>",
-      "-placeholders.studgetAdminName=<studgetAdminName>",
-      "-placeholders.studgetAdminMail=<studgetAdminMail>",
-      "-placeholders.studgetAdminPassword=<studgetAdminPassword>",
-      "-placeholders.dataBaseUser=<dataBaseUser>",
-      "-placeholders.dataBasePassword=<dataBasePassword>",
-      "-placeholders.aesInitialVector=<aesInitialVector>",
-      "-placeholders.aesPassword=<aesPassword>",
-      "info",
-      "migrate",
-      "info"
-    ]
+    command:
+      - "-locations=filesystem:/flyway/sql"
+      - "-connectRetries=60"
+      - "-placeholders.studgetAdminUserName=${studget_admin_user_name}"
+      - "-placeholders.studgetAdminName=${studget_admin_name}"
+      - "-placeholders.studgetAdminMail=${studget_admin_mail}"
+      - "-placeholders.studgetAdminPassword=${studget_admin_password}"
+      - "-placeholders.dataBaseUser=${backend_db_user}"
+      - "-placeholders.dataBasePassword=${backend_db_password}"
+      - "-placeholders.postgresDataBaseUser=${pg_db_user}"
+      - "-placeholders.postgresDataBasePassword=${pg_db_password}"
+      - "-placeholders.aesInitialVector=${aes_initial_vector}"
+      - "-placeholders.aesPassword=${aes_password}"
+      - "info"
+      - "migrate"
+      - "info"
     volumes:
-      - ./flyway/sql-v15:/flyway/sql
+      - ./database/flyway/sql:/flyway/sql
 ```
   
 ## Platzhalter
@@ -258,10 +261,15 @@ Die folgenden Platzhalter werden verwendet, um das verschlüsselte Passwort mith
 - `aesInitialVector`: AES-Anfangsvektor für die Verschlüsselung.
 - `aesPassword`: AES-Schlüssel zur Verschlüsselung.
 
+Für die Datenbank Backend-Anmeldung werden folgende Platzhalter verwendet:
+
+- `dataBaseUser`: Datenbank-Backend-Benutzer.
+- `dataBasePassword`: Passwort des Datenbank-Backend-Benutzers.
+
 Für die Datenbank Anmeldung werden folgende Platzhalter verwendet:
 
-- `dataBaseUser`: Datenbank-Benutzer.
-- `dataBasePassword`: Passwort des Datenbank-Benutzers.
+- `postgresDataBaseUser`: Datenbank-Benutzer.
+- `postgresDataBasePassword`: Passwort des Datenbank-Benutzers.
 
 ## Flyway Befehle
 
