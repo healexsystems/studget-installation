@@ -104,7 +104,7 @@ services:
       - helparticle:/app/Help-Article-Files
 
   postgres:
-    image: postgres:13
+    image: postgres:15-alpine
     container_name: postgres
     volumes:
       - db:/var/lib/postgresql/data
@@ -291,10 +291,11 @@ Hierfür werden administrative Rechte in ClinicalSite benötigt. Navigieren Sie 
 * Wählen Sie eine beliebige Bezeichnung für den Client im Feld `Name`
 * Wählen Sie einen Namen für den `Bezeichner (Client ID)`
 * Wählen Sie Client-Typ: `Browser-basiert (Authentifizierung ohne Kennwort, PKCE-Unterstützung erforderlich)`
-* Tragen Sie folgende `Redirect-URL(s` ein:
-  * https://studget.example.com/User/Profile
+* Tragen Sie folgende `Redirect-URLs` ein, z.B.:
+  * https://studget.example.com/UserProfile
   * https://studget.example.com/login/callback
 * Fügen Sie die Organisationseinheiten unter `Relevante Org.-Einheite` hinzu, welche in den Studget-Konfigurationsdateien aufgeführt sind. Um sich erfolgreich einloggen zu können, müssen Personen Affiliierte von mindestens einer zugangs-gewährender und einer gemappten Organisations-Einheit sein, siehe unten.
+* Legen Sie den Client an
 
 ## Studget Konfiguration
 
