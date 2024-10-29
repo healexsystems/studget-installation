@@ -82,7 +82,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:11.0.0
+    image: healexsystems/studget:11.3.3
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -170,6 +170,7 @@ Beim Starten des Studget-Images ist es möglich, die Initialisierung der Studget
 | `VUE_APP_HEALEX_SELF_SERVICE_REGISTER`| Nein  | Redirect URL zum Clinicalsite Register                                                                                                                |      -        | `https://clinicalsite.local/signup`|
 | `SELF_SERVICE_DOMAINS`    | Nein     | Erlaubte Domains für den Self-Service                                                                                                                  |      -        | `"['example.de','muster.de']"`     |
 | `VUE_APP_CLINICALSITE_URL`| Nein     | Clinicalsite Single Sign-on URL                                                                                                                        |      -        | `https://clinicalsite.local`       |
+| `VUE_APP_CLIENT_ID`       | Nein     | Clinicalsite external Cliend ID                                                                                                                      |      -        | `studget`       |
 
 # Docker Secrets
 Als eine Alternative zur Weitergabe vertraulicher Informationen über Umgebungsvariablen können Docker-Secrets verwendet werden. Dies zählt für folgende Variablen:
