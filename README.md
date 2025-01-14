@@ -23,6 +23,7 @@ Studget dient der Vollkostenberechnung von Studien im Rahmen der EU-Richtlinie f
   - [Ermitteln der ID einer Studget Organisationseinheit](#ermitteln-der-id-einer-studget-organisationseinheit)
   - [Ermitteln der ID eines Studget Kunden](#ermitteln-der-id-eines-studget-kunden)
 - [SSL Proxy-Server](#ssl-proxy-server)
+  - [Selbst signierte Zertifikate](#selbst-signierte-zertifikate)
 - [Zugriff auf die Container-Shell](#zugriff-auf-die-container-shell)
 - [Anzeige von Container Logs](#anzeige-von-container-logs)
 - [Studget Upgrade](#studget-upgrade)
@@ -393,6 +394,28 @@ Hier kann die ID des jeweiligen Kunden entnommen werden.
 # SSL Proxy-Server
 Eine SSL-Verschlüsselung mittels eines Proxy Servers ist empfohlen und im produktiven Betrieb zwingend.
 
+## Selbst signierte Zertifikate
+Für den Fall, dass Studget mit Servern kommuniziert, welche selbst signierte Zertifikate verwenden, muss das Root Zertifikat der eigenen Zertifizierungsstelle auf Betriebssystemebene dem Studget Docker Image hinzugefügt werden.
+Dies ist beispielsweise der Fall, wenn Studget via OIDC mit ClinicalSite angebunden wird und ClinicalSite selbst signierte Zertifikate verwendet.
+
+In dem folgenden Beispiel wird das Root Zertifikat dem Studget Image mit der Version 11.3.5 mittels eines Dockerfiles hinzugefügt:
+
+```shell
+FROM healexsystems/studget:11.3.5
+
+USER root
+
+# To be able to download `ca-certificates` with `apk add` command
+COPY rootCA.crt /root/my-root-ca.crt
+RUN cat /root/my-root-ca.crt >> /etc/ssl/certs/ca-certificates.crt
+
+# Add again root CA with `update-ca-certificates` tool
+RUN apk --no-cache add ca-certificates \
+    && rm -rf /var/cache/apk/*
+COPY rootCA.crt /usr/local/share/ca-certificates
+RUN update-ca-certificates
+```
+
 # Zugriff auf die Container-Shell
 Mit dem Befehl `docker exec` können Befehle innerhalb des laufenden Containers ausgeführt werden. Mit der folgenden Befehlszeile wird eine Container-Shell geöffnet.
 
@@ -404,7 +427,6 @@ docker exec -it docker some-studget /bin/sh
 ```shell
 docker logs Container-ID
 ```
-
 # Studget Upgrade
 
 1. Laden Sie das Image herunter, auf welches geupgraded werden soll, beispielsweise für die Version `10.2.0`: <br> 
@@ -437,4 +459,3 @@ V15_0_6__Changelog_10.1.1.sql
 V15_0_7__Changelog_10.2.0.sql
 ```
 3. Neustart des Docker Stacks.
-
