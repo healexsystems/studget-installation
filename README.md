@@ -27,6 +27,7 @@ Studget dient der Vollkostenberechnung von Studien im Rahmen der EU-Richtlinie f
 - [Zugriff auf die Container-Shell](#zugriff-auf-die-container-shell)
 - [Anzeige von Container Logs](#anzeige-von-container-logs)
 - [Studget Upgrade](#studget-upgrade)
+- [Upgrade Notes](#upgrade-notes)
 
 # Systemanforderungen
 ## Umgebungseinrichtung
@@ -145,14 +146,14 @@ services:
 ```
 
 # Umgebungsvariablen
-
+## Applikations Variablen:
 Beim Starten des Studget-Images ist es möglich, die Initialisierung der Studget-Instanz mittels folgender Umgebungsvariablen anzupassen:
 
-| Umgebungsvariable         | Erforderlich | Kommentar/Beschreibung                                                                                                                                    | Standard Wert |  Beispiel                   |
+| Umgebungsvariable         | Erforderlich | Kommentar/Beschreibung                                                                                                                             | Standard Wert |  Beispiel                         |
 |---------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|------------------------------------|
 | `ASPNETCORE_ENVIRONMENT`  | Ja       | Ausführungsumgebung für die ASP.NET Core-Anwendung                                                                                                     | Production    | `Development`                      |
 | `VIRTUAL_PORT`            | Ja       | Port auf welchem die Anwendung ausgeführt wird                                                                                                         |      -        | `80`                               |
-| `VIRTUAL_HOST`            | Nein     | Domainname, an welche die Anwendung weitergeleitet werden soll                                                                                          |      -        | `my-domain.com`                    |
+| `VIRTUAL_HOST`            | Nein     | Domainname, an welche die Anwendung weitergeleitet werden soll                                                                                         |      -        | `my-domain.com`                    |
 | `JWT_KEY`                 | Ja       | Key für eine sichere Übertragung von Informationen; (64-Zeichen string)                                                                                |      -        | `58c8317b928b8bdf2a9e45d2c0450e225c56b952a86a6212502714da7f02c2bd`                                 |
 | `DB_USER`                 | Ja       | Benutzername, mit dem sich die Anwendung mit der Datenbank verbindet.                                                                                  |      -        | `studget`                          |
 | `DB_SSL_MODE`             | Ja       | Verschlüsselte Verbindung zwischen der Anwendung und dem Datenbankserver                                                                               |               | `Disable`                          |
@@ -162,24 +163,30 @@ Beim Starten des Studget-Images ist es möglich, die Initialisierung der Studget
 | `DB_HOST`                 | Ja       | Database host name                                                                                                                                     |      -        | `postgres`                         |
 | `AES_PASSWORD`            | Ja       | Benutzerdefinierter AES key manager; (32-Zeichen string). Darf nach dem initialen Aufsetzen nicht mehr abgeändert werden                                                                                              |      -        | `34bfddf289ce77c0e1c1ac9769c5202e` |
 | `AES_INITIAL_VECTOR`      | Ja       | Initialisierungsvektor, welcher gewährleistet, dass identische Klartextblöcke bei wiederholter Verschlüsselung zu unterschiedlichen Chiffretexten führen; (16-Zeichen string). Darf nach dem initialen Aufsetzen nicht mehr abgeändert werden  |      -        | `ece03446c93b4ab7`                 |
-| `SMTP_CLIENT_HOST`        | Nein     | SMTP Host Server                                                                                                                                       |      -        | `smtp.office365.com`               |
-| `SMTP_CLIENT_PORT`        | Nein     | SMTP Verbindungsport                                                                                                                                  |      -        | `587`                              |
-| `MAIL_ADDRESS_LOGIN`      | Nein     | Login-Adresse für die E-Mail Server authentifizierung                                                                                                |      -        | `studget@my-domain.com`            |
-| `MAIL_ADDRESS_SENDER`     | Nein     | Absenderadresse, welche für den E-Mail-Versand verwendet wird                                                                                        |      -        | `studget@my-domain.com`            |
-| `MAIL_ADDRESS_LOGIN_PASSWORD`   | Nein     | Login-Passwort für die E-Mail Server authentifizierung                                                                                           |      -        | `ImportantPassword123`             |
-| `JWT_TOKEN_DURATION_HOURS`| Ja       | Zeit, nach welcher der JWT Token abläuft                                                                                                                |      -        | `00:30:00`                         |
+| `JWT_TOKEN_DURATION_HOURS`| Ja       | Zeit, nach welcher der JWT Token abläuft                                                                                                               |      -        | `00:30:00`                         |
 | `HELP_FILES_BASE_PATH`    | Ja       | Pfad für hochgeladene Dateien                                                                                                                          |      -        | `./Help-Article-Files/`            |
-| `VUE_APP_HEALEX_SELF_SERVICE_REGISTER`| Nein  | Redirect URL zum Clinicalsite Register                                                                                                                |      -        | `https://clinicalsite.local/signup`|
+| `VUE_APP_HEALEX_SELF_SERVICE_REGISTER`| Nein  | Redirect URL zum Clinicalsite Register                                                                                                        |      -        | `https://clinicalsite.local/signup`|
 | `SELF_SERVICE_DOMAINS`    | Nein     | Erlaubte Domains für den Self-Service                                                                                                                  |      -        | `"['example.de','muster.de']"`     |
 | `VUE_APP_CLINICALSITE_URL`| Nein     | Clinicalsite Single Sign-on URL                                                                                                                        |      -        | `https://clinicalsite.local`       |
-| `VUE_APP_CLIENT_ID`       | Nein     | Clinicalsite external Cliend ID                                                                                                                      |      -        | `studget`       |
+| `VUE_APP_CLIENT_ID`       | Nein     | Clinicalsite external Cliend ID                                                                                                                        |      -        | `studget`                          | 
+
+## Variablen für den E-Mail Versandt:
+
+| Umgebungsvariable               | Erforderlich | Kommentar/Beschreibung                                                                                                                             | Standard Wert |  Beispiel                          |
+|---------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|------------------------------------|
+| `SMTP_CLIENT_HOST`              | Nein     | SMTP Host Server                                                                                                                                       |      -        | `smtp.office365.com`               |
+| `SMTP_CLIENT_PORT`              | Nein     | SMTP Verbindungsport                                                                                                                                   |      -        | `587`                              |
+| `MAIL_ADDRESS_LOGIN`            | Nein     | Login-Adresse für die E-Mail Server authentifizierung                                                                                                  |      -        | `studget@my-domain.com`            |
+| `MAIL_ADDRESS_SENDER`           | Nein     | Absenderadresse, welche für den E-Mail-Versand verwendet wird                                                                                          |      -        | `studget@my-domain.com`            |
+| `MAIL_ADDRESS_LOGIN_PASSWORD`   | Nein     | Login-Passwort für die E-Mail Server authentifizierung                                                                                                 |      -        | `ImportantPassword123`             |
+
 
 # Docker Secrets
 Als eine Alternative zur Weitergabe vertraulicher Informationen über Umgebungsvariablen können Docker-Secrets verwendet werden. Dies zählt für folgende Variablen:
 
 - JWT_KEY
 - SMTP_CLIENT_PORT
-- MAIL_ADDRESS_PASSWORD
+- MAIL_ADDRESS_LOGIN_PASSWORD
 - AES_INITIAL_VECTOR
 - AES_PASSWORD
 - DB_PASSWORD
@@ -458,3 +465,18 @@ V15_0_6__Changelog_10.1.1.sql
 V15_0_7__Changelog_10.2.0.sql
 ```
 3. Neustart des Docker Stacks.
+
+# Upgrade Notes
+## Seit v11.3.6
+ENV `MAIL_ADDRESS_SENDER_PASSWORD` entfällt.
+
+## Seit v11.3.3
+ENV `MAIL_ADDRESS`  entfällt<br>
+ENV `MAIL_ADDRESS_PASSWORD` entfällt<br><br>
+ENV `VUE_APP_CLIENT_ID` hinzugefügt.<br>
+ENV `MAIL_ADDRESS_LOGIN_PASSWORD` hinzugefügt<br>
+ENV `MAIL_ADDRESS_SENDER_PASSWORD` hinzugefügt<br>
+ENV `MAIL_ADDRESS_LOGIN` hinzugefügt<br>
+ENV `MAIL_ADDRESS_SENDER` hinzugefügt<br>
+
+
