@@ -82,7 +82,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:11.3.6
+    image: healexsystems/studget:11.3.8
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
