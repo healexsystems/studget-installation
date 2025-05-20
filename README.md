@@ -76,8 +76,6 @@ Am einfachsten lässt sich Studget über `docker compose` starten. Hierfür werd
 Beispiel für eine compose.yml:
 
 ```yaml
-version: "3.7"
-
 volumes:
    db:
    helparticle:
@@ -195,8 +193,6 @@ Als eine Alternative zur Weitergabe vertraulicher Informationen über Umgebungsv
 Zum Beispiel:
 
 ```yaml
-version: "3.7"
-
 secrets:
   jwt_key:
     file: ./secrets/jwt_key_file
