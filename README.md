@@ -130,6 +130,7 @@ services:
       "-placeholders.studgetAdminPassword=Studget2024#",
       "-placeholders.dataBaseUser=studget",
       "-placeholders.dataBasePassword=password",
+      "-placeholders.postgresDataBaseName=studget",
       "-placeholders.postgresDataBaseUser=studget",
       "-placeholders.postgresDataBasePassword=password",
       "-placeholders.aesInitialVector=16-character-string",
@@ -241,6 +242,7 @@ flyway:
       - "-placeholders.studgetAdminPassword=${studget_admin_password}"
       - "-placeholders.dataBaseUser=${backend_db_user}"
       - "-placeholders.dataBasePassword=${backend_db_password}"
+      - "-placeholders.postgresDataBaseName=${pg_db_name}"      
       - "-placeholders.postgresDataBaseUser=${pg_db_user}"
       - "-placeholders.postgresDataBasePassword=${pg_db_password}"
       - "-placeholders.aesInitialVector=${aes_initial_vector}"
@@ -272,6 +274,7 @@ Für die Datenbank Backend-Anmeldung werden folgende Platzhalter verwendet:
 
 - `dataBaseUser`: Datenbank-Backend-Benutzer.
 - `dataBasePassword`: Passwort des Datenbank-Backend-Benutzers.
+- `pg_db_name`: Name der Datenbank
 
 Für die Datenbank Anmeldung werden folgende Platzhalter verwendet:
 
