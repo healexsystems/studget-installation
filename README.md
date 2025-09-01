@@ -82,7 +82,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:11.3.8
+    image: healexsystems/studget:11.3.12
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -466,6 +466,18 @@ V15_0_7__Changelog_10.2.0.sql
 3. Neustart des Docker Stacks.
 
 # Upgrade Notes
+## Seit v11.3.8
+- Platzhalter `postgresDataBaseName` wird zum Flyway Service hinzugefügt:
+
+```yaml
+flyway:
+    ...
+    command:
+      - ...
+      - "-placeholders.postgresDataBaseName=${pg_db_name}"
+      - ...
+```
+
 ## Seit v11.3.6
 ENV `MAIL_ADDRESS_SENDER_PASSWORD` entfällt.
 
