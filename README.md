@@ -82,7 +82,7 @@ volumes:
 
 services:
   studget:
-    image: healexsystems/studget:11.3.12
+    image: healexsystems/studget:11.3.15
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -482,7 +482,7 @@ flyway:
 ENV `MAIL_ADDRESS_SENDER_PASSWORD` entfällt.
 
 ## Seit v11.3.3
-ENV `MAIL_ADDRESS`  entfällt<br>
+ENV `MAIL_ADDRESS` entfällt<br>
 ENV `MAIL_ADDRESS_PASSWORD` entfällt<br><br>
 ENV `VUE_APP_CLIENT_ID` hinzugefügt.<br>
 ENV `MAIL_ADDRESS_LOGIN_PASSWORD` hinzugefügt<br>
