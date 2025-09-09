@@ -86,6 +86,7 @@ services:
     container_name: studget
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
+      Logging__LogLevel__Microsoft: Error
       DB_SSL_MODE: Disable
       DB_USER: studget
       DB_NAME: studget
@@ -151,6 +152,7 @@ Beim Starten des Studget-Images ist es möglich, die Initialisierung der Studget
 | Umgebungsvariable         | Erforderlich | Kommentar/Beschreibung                                                                                                                             | Standard Wert |  Beispiel                         |
 |---------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|------------------------------------|
 | `ASPNETCORE_ENVIRONMENT`  | Ja       | Ausführungsumgebung für die ASP.NET Core-Anwendung                                                                                                     | Production    | `Development`                      |
+| `Logging__LogLevel__Microsoft`  | Nein     | Logmeldungen aus allen Microsoft.*-Bibliotheken. Mögliche Werte sind: Trace, Debug, Information, Warning, Error, Critical, None                        | Error         | `Error      `                      |
 | `VIRTUAL_PORT`            | Ja       | Port auf welchem die Anwendung ausgeführt wird                                                                                                         |      -        | `80`                               |
 | `VIRTUAL_HOST`            | Nein     | Domainname, an welche die Anwendung weitergeleitet werden soll                                                                                         |      -        | `my-domain.com`                    |
 | `JWT_KEY`                 | Ja       | Key für eine sichere Übertragung von Informationen; (64-Zeichen string)                                                                                |      -        | `58c8317b928b8bdf2a9e45d2c0450e225c56b952a86a6212502714da7f02c2bd`                                 |
@@ -466,6 +468,9 @@ V15_0_7__Changelog_10.2.0.sql
 3. Neustart des Docker Stacks.
 
 # Upgrade Notes
+## Seit v11.3.15
+ENV `Logging__LogLevel__Microsoft` hinzugefügt
+
 ## Seit v11.3.8
 - Platzhalter `postgresDataBaseName` wird zum Flyway Service hinzugefügt:
 
