@@ -342,17 +342,17 @@ Beispielsweise:
 `clinicalsite_customer_ids.json` <br>
 In dieser Datei wird die Verknüpfung von der ClinicalSite Organisationseinheit mit der Studget Kunden-ID gesetzt. <br>
 
-Im folgenden Beispiel werden Affiliierte der ClinicalSite Organisationseinheit mit der ID:1 in den Studget Kunden mit der ID:1 und Affiliierte der ClinicalSite Organisationseinheit mit der ID:2 in den Studget Kunden mit der ID:12 gemappt.
+Im folgenden Beispiel werden Affiliierte der ClinicalSite Organisationseinheit mit der ID:3 in den Studget Kunden mit der ID:1 und Affiliierte der ClinicalSite Organisationseinheit mit der ID:5 in den Studget Kunden mit der ID:2 gemappt.
 
 ```json
 [
     {
       "StudgetID": "1",
-      "ClinicalSiteID": "1"
+      "ClinicalSiteID": "3"
     },
     {
       "StudgetID": "2",
-      "ClinicalSiteID": "12"
+      "ClinicalSiteID": "5"
     }    
 ] 
 ```
@@ -363,16 +363,16 @@ Information:
 `clinicalsite_orgunits_link.json` <br>
 In dieser Datei wird die Verknüpfung von der ClinicalSite Organisationseinheit mit der Studget Organisationseinheit gesetzt. <br>
 
-Im folgenden Beispiel haben Affiliierte der ClinicalSite Organisationseinheit mit der ID:1 Zugriff auf die Studget Organisationseinheit mit der ID:1 und Affiliierte der ClinicalSite Organisationseinheit mit der ID:2 Zugriff auf die Studget Organisationseinheit mit der ID:12
+Im folgenden Beispiel haben Affiliierte der ClinicalSite Organisationseinheit mit der ID:3 Zugriff auf die Studget Organisationseinheit mit der ID:1 und Affiliierte der ClinicalSite Organisationseinheit mit der ID:5 Zugriff auf die Studget Organisationseinheit mit der ID:2
 ```json
 [
     {
       "StudgetID": "1",
-      "ClinicalSiteID": "1"
+      "ClinicalSiteID": "3"
     },
     {
       "StudgetID": "2",
-      "ClinicalSiteID": "12"
+      "ClinicalSiteID": "5"
     }    
 ] 
 ```
